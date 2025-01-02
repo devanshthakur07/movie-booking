@@ -44,7 +44,9 @@ public class AuthController {
         );
 
         User user = userRepository.findByUsername(loginRequest.username()).orElseThrow(() -> new RuntimeException("User not found"));;
-        return jwtUtil.generateToken(authentication.getName(), user.getRole().name());
+        String token = jwtUtil.generateToken(authentication.getName(), user.getRole().name());
+        System.out.println(jwtUtil.extractRole(token));
+        return token;
     }
 
     @GetMapping("/logout")
