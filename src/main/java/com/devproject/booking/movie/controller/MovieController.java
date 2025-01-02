@@ -3,6 +3,7 @@ package com.devproject.booking.movie.controller;
 import com.devproject.booking.movie.dto.MovieRequest;
 import com.devproject.booking.movie.entity.Movie;
 import com.devproject.booking.movie.service.MovieService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,7 +25,7 @@ public class MovieController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<Movie> createOrUpdateMovie(@RequestBody MovieRequest movieRequest) {
+    public ResponseEntity<Movie> createOrUpdateMovie(@Valid @RequestBody MovieRequest movieRequest) {
         Movie savedMovie = movieService.saveMovie(movieRequest);
         return ResponseEntity.ok(savedMovie);
     }

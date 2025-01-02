@@ -3,8 +3,10 @@ package com.devproject.booking.movie.service;
 import com.devproject.booking.movie.dto.RegisterRequest;
 import com.devproject.booking.movie.entity.Role;
 import com.devproject.booking.movie.entity.User;
+import com.devproject.booking.movie.exception.CustomDuplicateException;
 import com.devproject.booking.movie.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +29,17 @@ public class UserService {
         user.setEmail(userRequest.email());
         user.setRole(Role.valueOf(userRequest.role()));
         user.setPassword(passwordEncoder.encode(userRequest.password()));
-        return userRepository.save(user);
+
+        try {
+            return userRepository.save(user);
+        } catch (DataIntegrityViolationException e) {
+            if (e.getMessage().contains("username")) {
+                throw new CustomDuplicateException("Username already exists");
+            } else if (e.getMessage().contains("email")) {
+                throw new CustomDuplicateException("Email already exists");
+            }
+            throw new CustomDuplicateException("Duplicate entry found");
+        }
     }
 
     public User findByUsername(String username) {

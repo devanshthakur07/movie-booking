@@ -7,6 +7,7 @@ import com.devproject.booking.movie.entity.User;
 import com.devproject.booking.movie.repository.UserRepository;
 import com.devproject.booking.movie.service.UserService;
 import com.devproject.booking.movie.util.JwtUtil;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,7 +32,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public String signup(@RequestBody RegisterRequest registerRequest) {
+    public String signup(@Valid @RequestBody RegisterRequest registerRequest) {
         userService.saveUser(registerRequest);
         return "User registered successfully";
     }
