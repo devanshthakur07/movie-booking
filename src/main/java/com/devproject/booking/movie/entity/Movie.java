@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "movies")
@@ -28,5 +29,13 @@ public class Movie {
 
     @Column(nullable = false)
     private Date releaseDate;
+
+    @ManyToMany
+    @JoinTable(
+            name = "Movie_Theater",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "theatre_id")
+    )
+    private Set<Theater> theaters;
 
 }
