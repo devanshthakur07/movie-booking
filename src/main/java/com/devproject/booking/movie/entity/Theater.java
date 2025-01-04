@@ -3,11 +3,12 @@ package com.devproject.booking.movie.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Data
 @Table(name = "Theaters")
+@Data
 public class Theater {
 
     @Id
@@ -24,5 +25,5 @@ public class Theater {
     private Integer screens;
 
     @ManyToMany(mappedBy = "theaters")
-    private Set<Movie> movies;
+    private Set<Movie> movies = new HashSet<>();
 }
