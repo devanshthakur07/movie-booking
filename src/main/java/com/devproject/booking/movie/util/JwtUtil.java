@@ -13,7 +13,7 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private static final String SECRET_KEY = "your-256-bit-secret-your-256-bit-secret"; // Replace with a secure key
+    private static final String SECRET_KEY = "your-256-bit-secret-your-256-bit-secret";
     private static final long EXPIRATION_TIME = 1000 * 60 * 60; // 1 hour in milliseconds
 
     private final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
@@ -28,9 +28,6 @@ public class JwtUtil {
                 .compact();
     }
 
-    /**
-     * Validate the JWT token and return the claims.
-     */
     public Claims extractClaims(String token) {
         try {
             return Jwts.parser()
@@ -43,9 +40,6 @@ public class JwtUtil {
         }
     }
 
-    /**
-     * Extract the username (subject) from the JWT token.
-     */
     public String extractUsername(String token) {
         return extractClaims(token).getSubject();
     }
@@ -54,16 +48,10 @@ public class JwtUtil {
         return extractClaims(token).get("role", String.class);
     }
 
-    /**
-     * Check if the token is expired.
-     */
     public boolean isTokenExpired(String token) {
         return extractClaims(token).getExpiration().before(new Date());
     }
 
-    /**
-     * Validate the token for the given username.
-     */
     public boolean validateToken(String token, String username) {
         String extractedUsername = extractUsername(token);
         return (extractedUsername.equals(username) && !isTokenExpired(token));
