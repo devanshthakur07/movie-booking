@@ -3,8 +3,10 @@ package com.devproject.booking.movie.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Entity
-@Table(name = "seats")
+@Table(name = "Seats")
 @Data
 public class Seat {
     @Id
@@ -21,4 +23,10 @@ public class Seat {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private SeatStatus status = SeatStatus.AVAILABLE;
+
+    @Column(name = "seat_type", nullable = false)
+    private String seatType;
+
+    @Column(name = "seat_price", nullable = false)
+    private BigDecimal seatPrice;
 }

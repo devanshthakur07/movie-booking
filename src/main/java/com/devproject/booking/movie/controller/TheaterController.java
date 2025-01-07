@@ -1,6 +1,6 @@
 package com.devproject.booking.movie.controller;
 
-import com.devproject.booking.movie.dto.TheaterRequest;
+import com.devproject.booking.movie.dto.request.TheaterRequest;
 import com.devproject.booking.movie.entity.Theater;
 import com.devproject.booking.movie.service.TheaterService;
 import jakarta.validation.Valid;

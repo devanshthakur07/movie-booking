@@ -1,6 +1,6 @@
 package com.devproject.booking.movie.service;
 
-import com.devproject.booking.movie.dto.TheaterRequest;
+import com.devproject.booking.movie.dto.request.TheaterRequest;
 import com.devproject.booking.movie.entity.Theater;
 import com.devproject.booking.movie.exception.CustomDuplicateException;
 import com.devproject.booking.movie.repository.TheaterRepository;

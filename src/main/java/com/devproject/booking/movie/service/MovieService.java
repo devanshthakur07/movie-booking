@@ -1,7 +1,7 @@
 package com.devproject.booking.movie.service;
 
 import com.devproject.booking.movie.dto.MovieDto;
-import com.devproject.booking.movie.dto.MovieRequest;
+import com.devproject.booking.movie.dto.request.MovieRequest;
 import com.devproject.booking.movie.entity.Movie;
 import com.devproject.booking.movie.entity.Theater;
 import com.devproject.booking.movie.repository.MovieRepository;
