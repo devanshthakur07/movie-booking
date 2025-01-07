@@ -5,6 +5,7 @@ import com.devproject.booking.movie.entity.Theater;
 import com.devproject.booking.movie.exception.CustomDuplicateException;
 import com.devproject.booking.movie.repository.TheaterRepository;
 import jakarta.validation.Valid;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -15,10 +16,12 @@ import java.util.List;
 public class TheaterService {
 
     private final TheaterRepository theaterRepository;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public TheaterService(TheaterRepository theaterRepository) {
+    public TheaterService(TheaterRepository theaterRepository, ModelMapper modelMapper) {
         this.theaterRepository = theaterRepository;
+        this.modelMapper = modelMapper;
     }
 
 

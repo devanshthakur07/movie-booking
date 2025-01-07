@@ -1,27 +1,32 @@
 package com.devproject.booking.movie.service;
 
+import com.devproject.booking.movie.dto.MovieDto;
 import com.devproject.booking.movie.dto.MovieRequest;
 import com.devproject.booking.movie.entity.Movie;
 import com.devproject.booking.movie.entity.Theater;
 import com.devproject.booking.movie.repository.MovieRepository;
 import com.devproject.booking.movie.repository.TheaterRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class MovieService {
 
     private final MovieRepository movieRepository;
     private final TheaterRepository theaterRepository;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public MovieService(MovieRepository movieRepository, TheaterRepository theaterRepository) {
+    public MovieService(MovieRepository movieRepository, TheaterRepository theaterRepository, ModelMapper modelMapper) {
         this.movieRepository = movieRepository;
         this.theaterRepository = theaterRepository;
+        this.modelMapper = modelMapper;
     }
 
 
@@ -35,8 +40,11 @@ public class MovieService {
         return movieRepository.save(movie);
     }
 
-    public List<Movie> getAllMovies() {
-        return movieRepository.findAll();
+    public List<MovieDto> getAllMovies() {
+        return movieRepository.findAll()
+                .stream()
+                .map(movie -> modelMapper.map(movie, MovieDto.class))
+                .collect(Collectors.toList());
     }
 
     public Optional<Movie> getMovieById(Long id) {

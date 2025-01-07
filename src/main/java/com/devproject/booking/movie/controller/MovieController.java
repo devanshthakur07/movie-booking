@@ -1,5 +1,6 @@
 package com.devproject.booking.movie.controller;
 
+import com.devproject.booking.movie.dto.MovieDto;
 import com.devproject.booking.movie.dto.MovieRequest;
 import com.devproject.booking.movie.entity.Movie;
 import com.devproject.booking.movie.service.MovieService;
@@ -18,6 +19,7 @@ public class MovieController {
 
     private final MovieService movieService;
 
+
     @Autowired
     public MovieController(MovieService movieService) {
         this.movieService = movieService;
@@ -31,7 +33,7 @@ public class MovieController {
     }
 
     @GetMapping
-    public List<Movie> getAllMovies() {
+    public List<MovieDto> getAllMovies() {
         return movieService.getAllMovies();
     }
 

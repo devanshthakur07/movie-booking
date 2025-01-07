@@ -1,5 +1,7 @@
 package com.devproject.booking.movie.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -24,6 +26,6 @@ public class Theater {
     @Column(nullable = false)
     private Integer screens;
 
-    @ManyToMany(mappedBy = "theaters")
-    private Set<Movie> movies = new HashSet<>();
+//    @ManyToMany(mappedBy = "theaters")
+//    private Set<Movie> movies = new HashSet<>();
 }

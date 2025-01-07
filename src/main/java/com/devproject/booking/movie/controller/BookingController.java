@@ -1,5 +1,6 @@
 package com.devproject.booking.movie.controller;
 
+import com.devproject.booking.movie.dto.BookingDto;
 import com.devproject.booking.movie.entity.Booking;
 import com.devproject.booking.movie.entity.Show;
 import com.devproject.booking.movie.entity.User;
@@ -8,7 +9,9 @@ import com.devproject.booking.movie.repository.UserRepository;
 import com.devproject.booking.movie.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,16 +35,16 @@ public class BookingController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<List<Booking>> getUserBookings(@AuthenticationPrincipal UserDetails userDetails) {
-        // Extract the username from the current user
-        String username = userDetails.getUsername();
+    public ResponseEntity<List<BookingDto>> getUserBookings() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
 
         // Fetch the user entity
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-
+        System.out.println(user.getId());
         // Fetch bookings for the user
-        List<Booking> bookings = bookingService.getUserBookings(user);
+        List<BookingDto> bookings = bookingService.getUserBookings(user);
         return ResponseEntity.ok(bookings);
     }
 
@@ -52,9 +55,10 @@ public class BookingController {
             @RequestBody List<String> seatNumbers) {
 
 
-        String username = userDetails.getUsername();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        System.out.println("username: " + username);
 
-        // Fetch the user entity
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
