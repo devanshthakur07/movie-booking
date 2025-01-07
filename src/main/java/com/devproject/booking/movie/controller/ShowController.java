@@ -1,8 +1,10 @@
 package com.devproject.booking.movie.controller;
 
+import com.devproject.booking.movie.dto.ShowDto;
 import com.devproject.booking.movie.dto.ShowRequest;
 import com.devproject.booking.movie.entity.Show;
 import com.devproject.booking.movie.service.ShowService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -24,13 +26,13 @@ public class ShowController {
     public ResponseEntity<Show> createOrUpdateShow(
             @PathVariable Long movieId,
             @PathVariable Long theatreId,
-            @RequestBody ShowRequest showRequest) {
+            @Valid @RequestBody ShowRequest showRequest) {
         Show savedShow = showService.createOrUpdateShow(movieId, theatreId, showRequest);
         return ResponseEntity.ok(savedShow);
     }
 
     @GetMapping
-    public ResponseEntity<List<Show>> getAllShows() {
+    public ResponseEntity<List<ShowDto>> getAllShows() {
         return ResponseEntity.ok(showService.getAllShows());
     }
 

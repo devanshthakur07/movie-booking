@@ -6,6 +6,8 @@ import com.devproject.booking.movie.entity.Show;
 import com.devproject.booking.movie.repository.SeatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,12 +25,19 @@ public class SeatService {
     }
 
     public void bookSeats(Show show, List<String> seatNumbers) {
+        List<Seat> seatsToBook = new ArrayList<>();
+
+
         for (String seatNumber : seatNumbers) {
             Seat seat = seatRepository.findByShowAndSeatNumber(show, seatNumber)
                     .orElseThrow(() -> new RuntimeException("Seat not found: " + seatNumber));
             if (seat.getStatus() == SeatStatus.BOOKED) {
                 throw new RuntimeException("Seat already booked: " + seatNumber);
             }
+            seatsToBook.add(seat);
+        }
+
+        for (Seat seat : seatsToBook) {
             seat.setStatus(SeatStatus.BOOKED);
             seatRepository.save(seat);
         }

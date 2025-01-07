@@ -2,7 +2,6 @@ package com.devproject.booking.movie.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -35,7 +34,7 @@ public class Movie {
     @JoinTable(
             name = "Movie_Theater",
             joinColumns = @JoinColumn(name = "movie_id"),
-            inverseJoinColumns = @JoinColumn(name = "theatre_id")
+            inverseJoinColumns = @JoinColumn(name = "theater_id")
     )
     private Set<Theater> theaters = new HashSet<>();
 
