@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,18 +32,21 @@ public class BookingService {
     }
 
     @Transactional
-    public Booking createBooking(User user, Show show, List<String> seatNumbers) {
-        seatService.bookSeats(show, seatNumbers);
+    public BookingDto createBooking(User user, Show show, List<String> seatNumbers) {
+        BigDecimal totalBookingPrice = seatService.bookSeats(show, seatNumbers);
 
         Booking booking = new Booking();
         booking.setUser(user);
         booking.setShow(show);
         booking.setSeats(String.join(",", seatNumbers));
         booking.setPaymentStatus(PaymentStatus.PENDING);
-        return bookingRepository.save(booking);
+        booking.setTotalPrice(totalBookingPrice);
+        Booking savedBooking = bookingRepository.save(booking);
+        return modelMapper.map(savedBooking, BookingDto.class);
     }
 
     public List<BookingDto> getUserBookings(User user) {
+        System.out.println("Reached here...");
         return bookingRepository.findByUser(user)
                 .stream()
                 .map(booking -> modelMapper.map(booking, BookingDto.class))

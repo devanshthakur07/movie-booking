@@ -3,7 +3,9 @@ package com.devproject.booking.movie.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "Bookings")
@@ -31,5 +33,8 @@ public class Booking {
 
     @Column(name = "booking_time", updatable = false)
     private LocalDateTime bookingTime = LocalDateTime.now();
+
+    @Column(name = "total_price", nullable = false)
+    private BigDecimal totalPrice;
 
 }

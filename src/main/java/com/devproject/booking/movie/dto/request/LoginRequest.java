@@ -1,4 +1,4 @@
-package com.devproject.booking.movie.dto;
+package com.devproject.booking.movie.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 

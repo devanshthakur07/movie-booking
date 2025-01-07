@@ -9,13 +9,6 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class MovieBookingApplication {
 
-	@Bean
-	public ModelMapper modelMapper() {
-		ModelMapper modelMapper = new ModelMapper();
-		modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
-		return modelMapper;
-	}
-
 	public static void main(String[] args) {
 		SpringApplication.run(MovieBookingApplication.class, args);
 	}

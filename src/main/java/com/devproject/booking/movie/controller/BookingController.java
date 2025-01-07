@@ -49,7 +49,7 @@ public class BookingController {
     }
 
     @PostMapping
-    public ResponseEntity<Booking> createBooking(
+    public ResponseEntity<BookingDto> createBooking(
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestParam Long showId,
             @RequestBody List<String> seatNumbers) {
@@ -62,12 +62,10 @@ public class BookingController {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Fetch the show entity
         Show show = showRepository.findById(showId)
                 .orElseThrow(() -> new RuntimeException("Show not found"));
 
-        // Create the booking
-        Booking booking = bookingService.createBooking(user, show, seatNumbers);
+        BookingDto booking = bookingService.createBooking(user, show, seatNumbers);
         return ResponseEntity.ok(booking);
     }
 }
