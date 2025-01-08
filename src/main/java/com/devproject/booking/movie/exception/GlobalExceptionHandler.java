@@ -1,5 +1,6 @@
 package com.devproject.booking.movie.exception;
 
+import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -18,6 +19,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<String> handleAccessDeniedException(AccessDeniedException ex) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You are not authorized for this operation");
+    }
+
+    @ExceptionHandler(TokenExpiredException.class)
+    public ResponseEntity<String> handleJwtException(TokenExpiredException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)

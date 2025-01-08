@@ -1,29 +1,38 @@
 package com.devproject.booking.movie.util;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import com.devproject.booking.movie.exception.TokenExpiredException;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.security.SignatureException;
 import java.util.Date;
 
 @Component
 public class JwtUtil {
 
-    private static final String SECRET_KEY = "your-256-bit-secret-your-256-bit-secret";
-    private static final long EXPIRATION_TIME = 1000 * 60 * 60; // 1 hour in milliseconds
+    @Value("${jwt.secret-key}")
+    private String SECRET_KEY;
 
-    private final Key key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+    private static final long EXPIRATION_TIME = 1000 * 60 * 60; //1hour
+
+    private Key key;
+
+    @PostConstruct
+    public void init() {
+        key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+    }
 
     public String generateToken(String username, String role) {
+        System.out.println("Generating token...");
         return Jwts.builder()
-                .setSubject(username)
-                .claim("role","ROLE_" + role)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .subject(username)
+                .claim("role", role)
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -35,13 +44,18 @@ public class JwtUtil {
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
-        } catch (JwtException e) {
-            throw new RuntimeException("Invalid or expired token", e);
+        } catch (ExpiredJwtException e) {
+            throw new TokenExpiredException("Invalid or expired token");
         }
     }
 
     public String extractUsername(String token) {
-        return extractClaims(token).getSubject();
+        try {
+            return extractClaims(token).getSubject();
+        }
+        catch(ExpiredJwtException ex) {
+            throw new TokenExpiredException("Token expired");
+        }
     }
 
     public String extractRole(String token) {
@@ -53,6 +67,7 @@ public class JwtUtil {
     }
 
     public boolean validateToken(String token, String username) {
+        System.out.println("token validation in progress...");
         String extractedUsername = extractUsername(token);
         return (extractedUsername.equals(username) && !isTokenExpired(token));
     }
