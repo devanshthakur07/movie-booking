@@ -1,5 +1,6 @@
 package com.devproject.booking.movie.util;
 
+import com.devproject.booking.movie.exception.InvalidTokenException;
 import com.devproject.booking.movie.exception.TokenExpiredException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -8,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.security.SignatureException;
 import java.util.Date;
 
 @Component
@@ -17,7 +17,7 @@ public class JwtUtil {
     @Value("${jwt.secret-key}")
     private String SECRET_KEY;
 
-    private static final long EXPIRATION_TIME = 1000 * 60 * 60; //1hour
+    private static final long EXPIRATION_TIME = 60 * 60 * 1000; //1hour
 
     private Key key;
 
@@ -38,24 +38,15 @@ public class JwtUtil {
     }
 
     public Claims extractClaims(String token) {
-        try {
-            return Jwts.parser()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
-        } catch (ExpiredJwtException e) {
-            throw new TokenExpiredException("Invalid or expired token");
-        }
+        return Jwts.parser()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
     }
 
     public String extractUsername(String token) {
-        try {
-            return extractClaims(token).getSubject();
-        }
-        catch(ExpiredJwtException ex) {
-            throw new TokenExpiredException("Token expired");
-        }
+        return extractClaims(token).getSubject();
     }
 
     public String extractRole(String token) {
