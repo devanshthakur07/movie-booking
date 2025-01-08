@@ -38,9 +38,9 @@ public class MovieController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Movie> getMovieById(@PathVariable Long id) {
-        Optional<Movie> movie = movieService.getMovieById(id);
-        return movie.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<MovieDto> getMovieById(@PathVariable Long id) {
+        MovieDto movie = movieService.getMovieById(id);
+        return ResponseEntity.ok(movie);
     }
 
     @PreAuthorize("hasRole('ADMIN')")

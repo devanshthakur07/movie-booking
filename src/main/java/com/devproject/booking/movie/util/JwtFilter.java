@@ -1,7 +1,6 @@
 package com.devproject.booking.movie.util;
 
 import com.devproject.booking.movie.exception.InvalidTokenException;
-import com.devproject.booking.movie.exception.TokenExpiredException;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
