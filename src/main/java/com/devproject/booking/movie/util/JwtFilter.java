@@ -1,9 +1,12 @@
 package com.devproject.booking.movie.util;
 
+import com.devproject.booking.movie.exception.InvalidTokenException;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -30,9 +33,25 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String token = authorizationHeader.substring(7);
-            UsernamePasswordAuthenticationToken authentication = getAuthentication(token);
-            if (authentication != null) {
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+            try {
+                UsernamePasswordAuthenticationToken authentication = getAuthentication(token);
+                if (authentication != null) {
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            }
+            catch(ExpiredJwtException ex) {
+                response.setStatus(HttpStatus.FORBIDDEN.value());
+                response.setContentType("application/json");
+                response.getWriter().write("{\"error\": \"Token expired\", \"message\": \"" + ex.getMessage() + "\"}");
+                response.getWriter().flush();
+                return;
+            }
+            catch (InvalidTokenException ex) {
+                response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                response.setContentType("application/json");
+                response.getWriter().write("{\"error\": \"Invalid token\", \"message\": \"" + ex.getMessage() + "\"}");
+                response.getWriter().flush(); // Ensure the response is sent back
+                return;
             }
         }
 

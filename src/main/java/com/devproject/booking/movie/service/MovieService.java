@@ -4,6 +4,7 @@ import com.devproject.booking.movie.dto.MovieDto;
 import com.devproject.booking.movie.dto.request.MovieRequest;
 import com.devproject.booking.movie.entity.Movie;
 import com.devproject.booking.movie.entity.Theater;
+import com.devproject.booking.movie.exception.MovieNotFoundException;
 import com.devproject.booking.movie.repository.MovieRepository;
 import com.devproject.booking.movie.repository.TheaterRepository;
 import org.modelmapper.ModelMapper;
@@ -47,8 +48,10 @@ public class MovieService {
                 .collect(Collectors.toList());
     }
 
-    public Optional<Movie> getMovieById(Long id) {
-        return movieRepository.findById(id);
+    public MovieDto getMovieById(Long id) {
+        Movie movie =  movieRepository.findById(id)
+                .orElseThrow(() -> new MovieNotFoundException("Movie with id " + id + "not found"));
+        return modelMapper.map(movie, MovieDto.class);
     }
 
     public void deleteMovie(Long id) {
