@@ -1,6 +1,5 @@
 package com.devproject.booking.movie.dto;
 
-import com.devproject.booking.movie.entity.Theater;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +10,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ShowDto{
+    private Long id;
     private MovieDto movie;
     private TheaterDto theater;
     private Integer screenNumber;

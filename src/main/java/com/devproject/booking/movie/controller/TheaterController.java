@@ -1,5 +1,6 @@
 package com.devproject.booking.movie.controller;
 
+import com.devproject.booking.movie.dto.TheaterDto;
 import com.devproject.booking.movie.dto.request.TheaterRequest;
 import com.devproject.booking.movie.entity.Theater;
 import com.devproject.booking.movie.service.TheaterService;
@@ -24,21 +25,21 @@ public class TheaterController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<Theater> createTheater(@Valid @RequestBody TheaterRequest theaterRequest) {
-        Theater savedTheater = theaterService.saveTheater(theaterRequest);
+    public ResponseEntity<TheaterDto> createTheater(@Valid @RequestBody TheaterRequest theaterRequest) {
+        TheaterDto savedTheater = theaterService.saveTheater(theaterRequest);
         return ResponseEntity.ok(savedTheater);
     }
 
     @GetMapping
-    public ResponseEntity<List<Theater>> getAllTheatres() {
-        List<Theater> theatres = theaterService.getAllTheaters();
+    public ResponseEntity<List<TheaterDto>> getAllTheatres() {
+        List<TheaterDto> theatres = theaterService.getAllTheaters();
         return ResponseEntity.ok(theatres);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
-    public ResponseEntity<Theater> updateTheatre(@PathVariable Long id, @Valid @RequestBody TheaterRequest theaterRequest) {
-        Theater updatedTheater = theaterService.updateTheater(id, theaterRequest);
+    public ResponseEntity<TheaterDto> updateTheatre(@PathVariable Long id, @Valid @RequestBody TheaterRequest theaterRequest) {
+        TheaterDto updatedTheater = theaterService.updateTheater(id, theaterRequest);
         return ResponseEntity.ok(updatedTheater);
     }
 
