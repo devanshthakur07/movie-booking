@@ -27,8 +27,8 @@ public class MovieController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
-    public ResponseEntity<Movie> createOrUpdateMovie(@Valid @RequestBody MovieRequest movieRequest) {
-        Movie savedMovie = movieService.saveMovie(movieRequest);
+    public ResponseEntity<MovieDto> createOrUpdateMovie(@Valid @RequestBody MovieRequest movieRequest) {
+        MovieDto savedMovie = movieService.saveMovie(movieRequest);
         return ResponseEntity.ok(savedMovie);
     }
 
@@ -48,20 +48,5 @@ public class MovieController {
     public ResponseEntity<Void> deleteMovie(@PathVariable Long id) {
         movieService.deleteMovie(id);
         return ResponseEntity.noContent().build();
-    }
-
-
-    @PostMapping("/{movieId}/add-theater/{theaterId}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Movie> addTheaterToMovie(@PathVariable Long movieId, @PathVariable Long theaterId) {
-        Movie updatedMovie = movieService.addTheaterToMovie(movieId, theaterId);
-        return ResponseEntity.ok(updatedMovie);
-    }
-
-    @PostMapping("/{movieId}/remove-theater/{theaterId}")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Movie> removeTheaterFromMovie(@PathVariable Long movieId, @PathVariable Long theaterId) {
-        Movie updatedMovie = movieService.removeTheaterFromMovie(movieId, theaterId);
-        return ResponseEntity.ok(updatedMovie);
     }
 }

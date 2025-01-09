@@ -3,7 +3,6 @@ package com.devproject.booking.movie.controller;
 
 import com.devproject.booking.movie.dto.request.LoginRequest;
 import com.devproject.booking.movie.dto.request.RegisterRequest;
-import com.devproject.booking.movie.entity.User;
 import com.devproject.booking.movie.repository.UserRepository;
 import com.devproject.booking.movie.service.UserService;
 import com.devproject.booking.movie.util.JwtUtil;

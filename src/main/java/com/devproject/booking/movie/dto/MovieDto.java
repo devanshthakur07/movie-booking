@@ -16,5 +16,4 @@ public class MovieDto {
     private Integer duration;
     private String language;
     private Date releaseDate;
-    private Set<TheaterDto> theaters;
 }
