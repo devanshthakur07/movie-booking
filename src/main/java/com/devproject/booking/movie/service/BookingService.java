@@ -5,6 +5,7 @@ import com.devproject.booking.movie.entity.Booking;
 import com.devproject.booking.movie.entity.PaymentStatus;
 import com.devproject.booking.movie.entity.Show;
 import com.devproject.booking.movie.entity.User;
+import com.devproject.booking.movie.exception.ShowNotAvailableException;
 import com.devproject.booking.movie.exception.ShowNotFoundException;
 import com.devproject.booking.movie.exception.UserNotFoundException;
 import com.devproject.booking.movie.repository.BookingRepository;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,6 +44,11 @@ public class BookingService {
 
         User user = findUserByUsername(username);
         Show show = findShowById(showId);
+
+        if(checkShowTimePassed(show.getShowTime())) {
+            throw new ShowNotAvailableException("This show is no longer available");
+        }
+
         BigDecimal totalBookingPrice = seatService.bookSeats(show, seatNumbers);
 
         Booking booking = new Booking();
@@ -71,5 +78,9 @@ public class BookingService {
                 .stream()
                 .map(booking -> modelMapper.map(booking, BookingDto.class))
                 .collect(Collectors.toList());
+    }
+
+    private boolean checkShowTimePassed(LocalDateTime showTime) {
+        return showTime.isBefore(LocalDateTime.now());
     }
 }
