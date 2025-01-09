@@ -26,6 +26,4 @@ public class Theater {
     @Column(nullable = false)
     private Integer screens;
 
-//    @ManyToMany(mappedBy = "theaters")
-//    private Set<Movie> movies = new HashSet<>();
 }
