@@ -1,5 +1,6 @@
 package com.devproject.booking.movie.service;
 
+import com.devproject.booking.movie.dto.TheaterDto;
 import com.devproject.booking.movie.dto.request.TheaterRequest;
 import com.devproject.booking.movie.entity.Theater;
 import com.devproject.booking.movie.exception.CustomDuplicateException;
@@ -11,6 +12,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TheaterService {
@@ -25,30 +27,35 @@ public class TheaterService {
     }
 
 
-    public Theater saveTheater(@Valid TheaterRequest theaterRequest) {
+    public TheaterDto saveTheater(@Valid TheaterRequest theaterRequest) {
         Theater theater = new Theater();
         theater.setCity(theaterRequest.city());
         theater.setName(theaterRequest.name());
         theater.setScreens(theaterRequest.screens());
         try {
-            return theaterRepository.save(theater);
+            theaterRepository.save(theater);
+            return modelMapper.map(theater, TheaterDto.class);
         }
         catch (DataIntegrityViolationException ex) {
             throw new CustomDuplicateException("Theater with same name and city already exists!");
         }
     }
 
-    public List<Theater> getAllTheaters() {
-        return theaterRepository.findAll();
+    public List<TheaterDto> getAllTheaters() {
+        return theaterRepository.findAll()
+                .stream()
+                .map(theater -> modelMapper.map(theater, TheaterDto.class))
+                .toList();
     }
 
-    public Theater updateTheater(Long id, TheaterRequest theaterRequest) {
-        Theater Theater = theaterRepository.findById(id)
+    public TheaterDto updateTheater(Long id, TheaterRequest theaterRequest) {
+        Theater theater = theaterRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Theater not found"));
-        Theater.setName(theaterRequest.name());
-        Theater.setCity(theaterRequest.city());
-        Theater.setScreens(theaterRequest.screens());
-        return theaterRepository.save(Theater);
+        theater.setName(theaterRequest.name());
+        theater.setCity(theaterRequest.city());
+        theater.setScreens(theaterRequest.screens());
+        theaterRepository.save(theater);
+        return modelMapper.map(theater, TheaterDto.class);
     }
 
     public void deleteTheater(Long id) {

@@ -33,7 +33,7 @@ public class ShowService {
         this.modelMapper = modelMapper;
     }
 
-    public Show createOrUpdateShow(Long movieId, Long theaterId, ShowRequest showRequest) {
+    public ShowDto createOrUpdateShow(Long movieId, Long theaterId, ShowRequest showRequest) {
         Movie movie = movieRepository.findById(movieId)
                 .orElseThrow(() -> new RuntimeException("Movie not found"));
         Theater theater = theatreRepository.findById(theaterId)
@@ -46,7 +46,9 @@ public class ShowService {
         show.setMovie(movie);
         show.setTheater(theater);
 
-        return showRepository.save(show);
+        showRepository.save(show);
+
+        return modelMapper.map(show, ShowDto.class);
     }
 
     public List<ShowDto> getAllShows() {
@@ -56,21 +58,28 @@ public class ShowService {
                 .collect(Collectors.toList());
     }
 
-    public Show getShowById(Long id) {
-        return showRepository.findById(id)
+    public ShowDto getShowById(Long id) {
+       Show show = showRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Show not found"));
+       return modelMapper.map(show, ShowDto.class);
     }
 
     public void deleteShow(Long id) {
         showRepository.deleteById(id);
     }
 
-    public List<Show> getShowsByMovie(Long movieId) {
-        return showRepository.findByMovieId(movieId);
+    public List<ShowDto> getShowsByMovie(Long movieId) {
+        return showRepository.findByMovieId(movieId)
+                .stream()
+                .map(show -> modelMapper.map(show, ShowDto.class))
+                .collect(Collectors.toList());
     }
 
-    public List<Show> getShowsByTheater(Long theatreId) {
-        return showRepository.findByTheaterId(theatreId);
+    public List<ShowDto> getShowsByTheater(Long theatreId) {
+        return showRepository.findByTheaterId(theatreId)
+                .stream()
+                .map(show -> modelMapper.map(show, ShowDto.class))
+                .collect(Collectors.toList());
     }
 
 

@@ -23,11 +23,11 @@ public class ShowController {
 
     @PostMapping("/{movieId}/{theatreId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Show> createOrUpdateShow(
+    public ResponseEntity<ShowDto> createOrUpdateShow(
             @PathVariable Long movieId,
             @PathVariable Long theatreId,
             @Valid @RequestBody ShowRequest showRequest) {
-        Show savedShow = showService.createOrUpdateShow(movieId, theatreId, showRequest);
+        ShowDto savedShow = showService.createOrUpdateShow(movieId, theatreId, showRequest);
         return ResponseEntity.ok(savedShow);
     }
 
@@ -37,18 +37,18 @@ public class ShowController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Show> getShowById(@PathVariable Long id) {
-        Show show = showService.getShowById(id);
+    public ResponseEntity<ShowDto> getShowById(@PathVariable Long id) {
+        ShowDto show = showService.getShowById(id);
         return ResponseEntity.ok(show);
     }
 
     @GetMapping("/movie/{movieId}")
-    public ResponseEntity<List<Show>> getShowsByMovie(@PathVariable Long movieId) {
+    public ResponseEntity<List<ShowDto>> getShowsByMovie(@PathVariable Long movieId) {
         return ResponseEntity.ok(showService.getShowsByMovie(movieId));
     }
 
     @GetMapping("/theater/{theaterId}")
-    public ResponseEntity<List<Show>> getShowsByTheater(@PathVariable Long theaterId) {
+    public ResponseEntity<List<ShowDto>> getShowsByTheater(@PathVariable Long theaterId) {
         return ResponseEntity.ok(showService.getShowsByTheater(theaterId));
     }
 
