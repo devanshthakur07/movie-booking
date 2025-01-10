@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "users")
 @Data
@@ -24,5 +26,11 @@ public class User {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Column(name = "reset_token")
+    private String resetToken;
+
+    @Column(name = "token_expiration_time")
+    private LocalDateTime tokenExpirationTime;
 }
 
